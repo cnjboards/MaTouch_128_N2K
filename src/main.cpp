@@ -17,6 +17,8 @@
 #include "matouch-display.h"
 #include "matouch-simulate.h"
 #include "otaWeb.h"
+#include "matouch_expio.h"
+#include "TCA9554.h"
 
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -65,6 +67,7 @@ void pin_init();
 void encoder_irq();
 void checkButton(void);
 void otaSetup(void);
+void i2c_scan();
 
 // *****************************************************************************
 void setup() {
@@ -79,7 +82,7 @@ void setup() {
   // Init USB serial port
   Serial.begin ( 115200 );
 
-  // setup digital IO
+  // setup digital IO for display
   pin_init();
 
   // some serial outout, proof of life lol
@@ -90,10 +93,13 @@ void setup() {
   // setup ota stuff
   otaSetup();
 
-  // I2C setup
+  // I2C setup Touch screen
   Wire.begin(TOUCH_SDA, TOUCH_SCL);
-  Serial.printf ( "Wire Setup done");
-
+  // I2C setup Expansion connector
+  expIOInit();
+  // log completion
+  Serial.println ( "I2C Wire Setup done");
+  
   // setup N2K
   #ifdef N2KENABLE
   setupN2K();
@@ -242,7 +248,7 @@ void loop() {
   if (fileUploadStarted != true) {
     // Update display
     processDisplay();
-  }
+  } // end if
 } // end loop
 
 // setup all the IO
@@ -357,3 +363,32 @@ void encoder_irq()
   old_State = State; // the first position was changed
   move_flag = 1;
 } // end encoder_irq
+
+byte i2c_try_address(byte address) {
+  Wire1.beginTransmission(address);
+  return Wire1.endTransmission();
+} // end i2c_try_address
+
+void i2c_scan() {
+  byte error, address;
+  int nDevices;
+ 
+  Serial.println("Scanning I2C...");
+ 
+  nDevices = 0;
+  for(address = 1; address < 127; address++ )  {
+    error = i2c_try_address(address);
+    if(error == 0) {
+      Serial.printf("I2C device found at address 0x%0x\n", address);
+      //i2c_identify(address);
+      nDevices++;
+    } else if(error==4) {
+      Serial.printf("Unknown error at address 0x%0x\n", address);
+    } // end if
+  } // end for
+
+  if(nDevices == 0)
+    Serial.println("No I2C devices found\n");
+  else
+    Serial.println("done\n");
+} // end i2c_scan

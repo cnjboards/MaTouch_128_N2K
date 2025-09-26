@@ -39,3 +39,7 @@
 #define BUTTON_PIN 6
 #define ENCODER_CLK 9 // CLK
 #define ENCODER_DT 10 // DT
+
+// expansion IO
+#define I2C_SDA_PIN 17 
+#define I2C_SCL_PIN 18 
