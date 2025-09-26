@@ -1,6 +1,6 @@
 # MaTouch_128_N2K
 
-|<img src="https://github.com/user-attachments/assets/05e210b0-dd9f-49de-a668-e6fabe9b4afe" width="350" height="250">|<img src="https://github.com/user-attachments/assets/61b417a5-9ce8-4f60-857d-ac7cb4b381ba" width="400" height="250">|
+|<img src="https://github.com/user-attachments/assets/8a3f2d27-3f76-4eae-8d4e-783d1878e00d" width="350" height="250">|<img src="https://github.com/user-attachments/assets/61b417a5-9ce8-4f60-857d-ac7cb4b381ba" width="400" height="250">|
 |:-:|:-:|
 
 Application for the MaTouch 1.28" display (GC9a01) using cnjboards MT_N2K NMEA2000 adapter card
